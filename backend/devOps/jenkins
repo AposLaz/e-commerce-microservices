@@ -1,0 +1,7 @@
+After the installation of Jenkins and Docker. Add jenkins user to dockergroup (like you did)
+
+sudo gpasswd -a jenkins docker
+
+sudo service jenkins restart
+
+and this will connect to docker

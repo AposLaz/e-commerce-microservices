@@ -1,0 +1,8 @@
+npm install typescript --save-dev
+npm i router express dotenv
+npm i -D typescript @types/express @types/node
+npm i ts-node-dev
+npx tsc --init
+npm install express-validator
+npm install typeorm --save
+npm i pg
