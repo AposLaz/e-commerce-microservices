@@ -1,4 +1,4 @@
-import Configs from "../setup/config";
+import Configs from "../config/config";
 import bcrypt from "bcryptjs";
 import jwt, { JwtPayload } from "jsonwebtoken";
 

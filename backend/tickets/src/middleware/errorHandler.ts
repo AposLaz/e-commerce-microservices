@@ -1,18 +1,5 @@
-/**
- * We have two types of errors
- *
- * 1) RequestValidationError
- * 2) DatabaseConnactionError
- * 3) Errors that I do not know how to handle them
- *
- * Error Format is {
- *                    message: 'message of error'
- *                    field: 'for example email - password etc...'
- *                 }
- */
-
 import { Request, Response, NextFunction } from "express";
-import { BaseError, ErrorLogger } from "../utils/error-api";
+import { BaseError, ErrorLogger } from "../utils/appError";
 
 export const errorHandler = async (
   err: Error,

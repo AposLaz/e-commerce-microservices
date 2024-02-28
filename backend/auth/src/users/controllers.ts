@@ -7,11 +7,17 @@ export const UserController = {
   async signIn(req: Request, res: Response): Promise<void> {
     //user Sign In
     const user = await services.SignInUser(req);
-    //Store it on session data from cookie
+    //Store it on session data from cookie and send it as session cookie
     req.session = {
       jwt: user.jwt,
     };
-    res.status(200).send(user);
+    //send remain info back to user
+    const data = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    };
+    res.status(200).send(data);
   },
 
   async signUp(req: Request, res: Response): Promise<void> {

@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import envVars from "../config";
+import envVars from "../../config/config";
 import { UserModel } from "./models/UserModel";
 import { DatabaseConnectionError } from "../../utils/error-api";
 

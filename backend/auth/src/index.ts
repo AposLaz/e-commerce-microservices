@@ -1,5 +1,5 @@
 import { app } from "./app";
-import Configs from "./setup/config";
+import Configs from "./config/config";
 import { connectDatabase } from "./setup/database/connection";
 
 const port = Configs.AUTH_PORT;

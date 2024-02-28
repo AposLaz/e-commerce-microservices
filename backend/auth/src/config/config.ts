@@ -13,7 +13,7 @@ const requiredVars: Array<string> = [
 
 requiredVars.map((name) => {
   if (!process.env[name]) {
-    throw new BadRequestError(`Environment variable ${name} is missing`);
+    throw new Error(`Environment variable ${name} is missing`);
   }
 });
 
