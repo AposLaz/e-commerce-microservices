@@ -1,13 +1,27 @@
-import express from "express";
-import { RouteError } from "../utils/appError";
+import express, { Request, Response } from "express";
+import { RouteError } from "@aplaz-tech/error-handler";
+import { verifyUser } from "../middleware/auth";
+import { TicketController } from "./controller";
+import { asyncHandler } from "../middleware/asyncHandler";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  throw new RouteError("Oups");
+router.get("/", (req: Request, res: Response) => {
+  res.sendStatus(200);
 });
-router.get("/:id", (req, res) => {});
-router.post("/", (req, res) => {});
-router.put("/", (req, res) => {});
+
+router.get("/:id", (req: Request, res: Response) => {
+  res.sendStatus(200);
+});
+
+router.post("/", verifyUser, asyncHandler(TicketController.createTicket));
+
+router.put("/", verifyUser, (req: Request, res: Response) => {
+  res.sendStatus(200);
+});
+
+router.delete("/", verifyUser, (req: Request, res: Response) => {
+  res.sendStatus(200);
+});
 
 export default router;

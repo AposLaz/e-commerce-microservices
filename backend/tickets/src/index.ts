@@ -1,9 +1,18 @@
-import { initRestApi } from "./app";
+import { app } from "./app";
+import { Config } from "./config/config";
+import { logger } from "./config/logger";
 import { connect } from "./config/mongodb/mongo.client";
 
-const app = initRestApi();
-const db = async () => {
+const port = Config.port || 8080;
+
+const initRestApi = async () => {
   await connect();
+
+  app.listen(port, () => {
+    console.info("Auth Service running in PORT " + port);
+  });
 };
 
-db();
+initRestApi().catch((error: Error) =>
+  logger.log({ level: "error", message: error.message })
+);

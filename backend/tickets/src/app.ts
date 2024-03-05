@@ -1,24 +1,31 @@
-import { Config } from "./config/config";
-import { logger } from "./config/logger";
 import express, { Express } from "express";
 import router from "./router";
-import { errorHandler } from "./middleware/errorHandler";
+import { RouteError, errorHandler } from "@aplaz-tech/error-handler";
+import cookieSession from "cookie-session";
+import cors from "cors";
 
-export const initRestApi = () => {
-  const port = Config.port || 8080;
-  const app: Express = express();
+const app: Express = express();
 
-  app.get("/health", (_req, res) => {
-    res.send("ok");
-  });
+app.get("/health", (_req, res) => {
+  res.send("ok");
+});
 
-  app.use(express.json());
+app.use(cors());
+app.set("trust proxy", true);
+app.use(express.json());
+app.use(
+  cookieSession({
+    signed: false,
+    secure: false, //true if use https
+  })
+);
 
-  app.use("/api/v1", router);
+app.use("/api/v1", router);
 
-  app.use(errorHandler);
+app.use("*", (req, _res) => {
+  throw new RouteError(`Route ${req.originalUrl} not exists`);
+});
 
-  app.listen(port, () =>
-    logger.info(`App listening on port: ${port} with env: ${Config.nodeEnv}`)
-  );
-};
+app.use(errorHandler);
+
+export { app };
