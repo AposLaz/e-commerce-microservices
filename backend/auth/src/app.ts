@@ -1,8 +1,7 @@
 import express, { Express } from "express";
 import cookieSession from "cookie-session";
 import router from "./router";
-import { errorHandler } from "./middlewares/errorHandler";
-import { NotRouteError } from "./utils/error-api";
+import { errorHandler, RouteError } from "@aplaz-tech/error-handler";
 import cors from "cors";
 
 const app: Express = express();
@@ -25,8 +24,8 @@ app.use(express.json());
 app.use("/api/v1", router);
 
 //Route does not exists
-app.all("*", async (req, res) => {
-  throw new NotRouteError();
+app.all("*", async (req, _res) => {
+  throw new RouteError(`Route ${req.originalUrl} not exists`);
 });
 
 //Handling Errors

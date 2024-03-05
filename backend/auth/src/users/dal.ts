@@ -1,6 +1,9 @@
 import { appDataSource } from "../setup/database/connection";
 import { UserModel } from "../setup/database/models/UserModel";
-import { BadRequestError, DatabaseConnectionError } from "../utils/error-api";
+import {
+  BadRequestError,
+  DatabaseConnectionError,
+} from "@aplaz-tech/error-handler";
 import { UserInterfaceAllInfo, UserInterfaceSignUp } from "./types";
 
 export class UserRepository {

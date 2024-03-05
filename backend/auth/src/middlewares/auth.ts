@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Passwords } from "../utils/password";
-import { BadRequestError } from "../utils/error-api";
+import { BadRequestError, UnAuthorizedError } from "@aplaz-tech/error-handler";
 
 export const verifyToken = async (
   req: Request,
@@ -24,7 +24,7 @@ export const verifyToken = async (
         however this often results in a poor user experience.
     */
   if (!req.session?.jwt) {
-    return res.status(403).send({ currentUser: null });
+    throw new UnAuthorizedError();
   }
   //verify JWT token
   try {

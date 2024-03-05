@@ -3,7 +3,10 @@ import { UserRepository } from "./dal";
 import { Passwords } from "../utils/password";
 import { returnUser } from "./types";
 import { matchedData, validationResult } from "express-validator";
-import { ErrorValidationHandler, BadRequestError } from "../utils/error-api";
+import {
+  BadRequestError,
+  ExpressValidationError,
+} from "@aplaz-tech/error-handler";
 
 const repository = new UserRepository();
 
@@ -57,7 +60,7 @@ export const UserServices = {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      throw new ErrorValidationHandler(errors.array());
+      throw new ExpressValidationError(errors.array());
     }
 
     //Only validate Data in Schema
@@ -72,7 +75,7 @@ export const UserServices = {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      throw new ErrorValidationHandler(errors.array());
+      throw new ExpressValidationError(errors.array());
     }
     //Only validate Data in Schema
     let signUpSchema = matchedData(req, {

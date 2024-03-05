@@ -1,5 +1,3 @@
-import { BadRequestError } from "../utils/error-api";
-
 require("dotenv").config();
 
 const requiredVars: Array<string> = [

@@ -1,3 +1,4 @@
+import { BadRequestError } from "@aplaz-tech/error-handler";
 import { body } from "express-validator";
 
 export = {
@@ -31,7 +32,7 @@ export = {
       // If password and confirm password not same
       // don't allow to sign up and throw error
       if (password !== confirmPassword) {
-        throw new Error("Passwords must be same");
+        throw new BadRequestError("Passwords must be same");
       }
     }), //validate password,
   SignUpConfirmPassword: body("confirmPassword")
