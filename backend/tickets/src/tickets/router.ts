@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import { RouteError } from "@aplaz-tech/error-handler";
 import { verifyUser } from "../middleware/auth";
 import { TicketController } from "./controller";
 import { asyncHandler } from "../middleware/asyncHandler";

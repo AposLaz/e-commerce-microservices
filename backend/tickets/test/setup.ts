@@ -19,5 +19,5 @@ export class SetupTests {
   }
 }
 
-const setupTestsConfigs = new SetupTests();
-export default setupTestsConfigs;
+export const setupTestsConfigs = new SetupTests();
+export const TestEnvs = { ticketsUrl: "/api/v1/tickets" };

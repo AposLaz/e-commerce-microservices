@@ -1,8 +1,8 @@
 import express, { Express } from "express";
-import router from "./router";
 import { RouteError, errorHandler } from "@aplaz-tech/error-handler";
 import cookieSession from "cookie-session";
 import cors from "cors";
+import TicketsRouter from "./tickets/router";
 
 const app: Express = express();
 
@@ -20,7 +20,7 @@ app.use(
   })
 );
 
-app.use("/api/v1", router);
+app.use("/api/v1/tickets", TicketsRouter);
 
 app.use("*", (req, _res) => {
   throw new RouteError(`Route ${req.originalUrl} not exists`);

@@ -1,28 +1,28 @@
-import { MongoAPIError, MongoClient } from "mongodb";
+import { MongoClient, MongoError } from "mongodb";
 import { logger } from "../logger";
-
-const url = "mongodb://root:root@localhost:27017/?retryWrites=true&w=majority";
+import { Config } from "../config";
+import { DatabaseConnectionError } from "@aplaz-tech/error-handler";
 
 let db: MongoClient;
 let connected = false;
 
-//CReate a Singleton Connection
+//Create a Singleton Connection
 
 export const connect = async () => {
   if (connected) return db;
 
-  db = new MongoClient(url, { monitorCommands: true });
+  db = new MongoClient(Config.mongoUri, { monitorCommands: true });
 
   try {
     await db.connect();
     connected = true;
     logger.info("Connected to database successfully");
+
+    return db;
   } catch (error: unknown) {
     connected = false;
-    const err = error as MongoAPIError;
-    logger.error(`[ERROR] => Could not connect to database ${err.message}`);
+    const err = error as MongoError;
 
-    //TODO => DatabaseError
-    throw new Error(err.message);
+    throw new DatabaseConnectionError(err.message);
   }
 };
