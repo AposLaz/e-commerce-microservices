@@ -1,19 +1,15 @@
 import express, { Request, Response } from "express";
 import { verifyUser } from "../middleware/auth";
-import { TicketController } from "./controller";
+import { Controller } from "./controller";
 import { asyncHandler } from "../middleware/asyncHandler";
 
 const router = express.Router();
 
-router.get("/", (req: Request, res: Response) => {
-  res.sendStatus(200);
-});
+router.get("/", asyncHandler(Controller.getTicket));
 
-router.get("/:id", (req: Request, res: Response) => {
-  res.sendStatus(200);
-});
+router.get("/:id", asyncHandler(Controller.getTicketById));
 
-router.post("/", verifyUser, asyncHandler(TicketController.createTicket));
+router.post("/", verifyUser, asyncHandler(Controller.createTicket));
 
 router.put("/", verifyUser, (req: Request, res: Response) => {
   res.sendStatus(200);

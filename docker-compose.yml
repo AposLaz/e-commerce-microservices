@@ -1,38 +1,38 @@
 version: "3.9"
 
 services:
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-    ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
-    environment:
-      AUTH_URL: ${AUTH_IP}:${AUTH_PORT}
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-      NEXTAUTH_URL: ${NEXTAUTH_URL}
-      GITHUB_ID: ${GITHUB_ID}
-      GITHUB_SECRET: ${GITHUB_SECRET}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-    networks:
-      - authentication-network
-    restart: always
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./frontend
+  #   ports:
+  #     - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+  #   environment:
+  #     AUTH_URL: ${AUTH_IP}:${AUTH_PORT}
+  #     NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+  #     NEXTAUTH_URL: ${NEXTAUTH_URL}
+  #     GITHUB_ID: ${GITHUB_ID}
+  #     GITHUB_SECRET: ${GITHUB_SECRET}
+  #     GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+  #     GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+  #   networks:
+  #     - authentication-network
+  #   restart: always
 
-  authentication:
-    container_name: authentication
-    image: alazidis/e-commerce-auth
-    ports:
-      - "${AUTH_PORT}:${AUTH_PORT}"
-    environment:
-      AUTH_PORT: ${AUTH_PORT}
-      AUTH_POSTGRES_USERNAME: ${AUTH_POSTGRES_USERNAME}
-      AUTH_POSTGRES_PWD: ${AUTH_POSTGRES_PWD}
-      AUTH_POSTGRES_IP: ${AUTH_POSTGRES_IP}
-      AUTH_POSTGRES_PORT: ${AUTH_POSTGRES_PORT}
-    networks:
-      - authentication-network
-    restart: always
+  # authentication:
+  #   container_name: authentication
+  #   image: alazidis/e-commerce-auth
+  #   ports:
+  #     - "${AUTH_PORT}:${AUTH_PORT}"
+  #   environment:
+  #     AUTH_PORT: ${AUTH_PORT}
+  #     AUTH_POSTGRES_USERNAME: ${AUTH_POSTGRES_USERNAME}
+  #     AUTH_POSTGRES_PWD: ${AUTH_POSTGRES_PWD}
+  #     AUTH_POSTGRES_IP: ${AUTH_POSTGRES_IP}
+  #     AUTH_POSTGRES_PORT: ${AUTH_POSTGRES_PORT}
+  #   networks:
+  #     - authentication-network
+  #   restart: always
 
   authentication_db:
     container_name: pg_container

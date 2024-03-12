@@ -7,7 +7,7 @@ const port = Config.port || 8080;
 
 const initRestApi = async () => {
   app.listen(port, () => {
-    console.info("Auth Service running in PORT " + port);
+    console.info("Ticket Service running in PORT " + port);
   });
 };
 

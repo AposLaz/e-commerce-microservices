@@ -102,4 +102,8 @@ describe("Tickets validate data", () => {
     expect(tickets[0].title).toEqual("testTicket");
     expect(tickets[0].userId).toEqual("1234");
   });
+
+  it("Returns 404 error if ticket not found", async () => {});
+
+  it("Returns the ticket if it is found", async () => {});
 });
