@@ -5,18 +5,14 @@ import { asyncHandler } from "../middleware/asyncHandler";
 
 const router = express.Router();
 
-router.get("/", asyncHandler(Controller.getTicket));
+router.get("/", asyncHandler(Controller.getTickets));
 
 router.get("/:id", asyncHandler(Controller.getTicketById));
 
 router.post("/", verifyUser, asyncHandler(Controller.createTicket));
 
-router.put("/", verifyUser, (req: Request, res: Response) => {
-  res.sendStatus(200);
-});
+router.patch("/:id", verifyUser, asyncHandler(Controller.updateTicket));
 
-router.delete("/", verifyUser, (req: Request, res: Response) => {
-  res.sendStatus(200);
-});
+router.delete("/", verifyUser, asyncHandler(Controller.deleteTickets));
 
 export default router;

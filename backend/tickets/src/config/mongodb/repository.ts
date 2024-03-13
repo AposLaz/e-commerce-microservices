@@ -5,6 +5,8 @@ import {
   Filter,
   InsertManyResult,
   OptionalUnlessRequiredId,
+  UpdateFilter,
+  UpdateOptions,
   WithId,
 } from "mongodb";
 import { connect } from "./mongo.client";
@@ -68,10 +70,22 @@ const readSingleDocument = async <T>(
   return await collection.findOne<T>(params.query, params.queryOptions);
 };
 
+const updateSingleDocument = async <T extends Document>(
+  dbProps: DbProps,
+  filter: Filter<T>,
+  update: any,
+  options?: UpdateOptions
+) => {
+  const collection = await getCollection<T>(dbProps);
+
+  const updateOptions = options ? options : { upsert: true };
+  return await collection.updateOne(filter, { $set: update }, updateOptions);
+};
+
 const deleteDocuments = async <T extends Document>(
   dbProps: DbProps,
   filter: Filter<T>,
-  deleteOptions: DeleteOptions
+  deleteOptions?: DeleteOptions
 ): Promise<DeleteResult> => {
   const collection = await getCollection<T>(dbProps);
   return await collection.deleteMany(filter, deleteOptions);
@@ -81,6 +95,7 @@ export const MongoRepository = {
   insertDocuments,
   readDocuments,
   readSingleDocument,
+  updateSingleDocument,
   deleteDocuments,
   dropCollection,
 };

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import validator from "validator";
+import { ObjectId } from "mongodb";
 
 export const createTicketsPayload = z.object({
   title: z
@@ -13,6 +14,12 @@ export const createTicketsPayload = z.object({
     .gt(0, { message: "price must be greater than 0" })
     .positive({ message: "price must be a positive number" }),
 });
+
+export const updateTicketPayload = createTicketsPayload
+  .partial()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "No data to update",
+  });
 
 export const getTicketParams = z.object({
   title: z
@@ -34,4 +41,15 @@ export const getTicketParams = z.object({
     .optional(),
   createAt: z.string().datetime().optional(),
   updateAt: z.string().datetime().optional(),
+});
+
+export const deleteTicketsPayload = z.object({
+  id: z
+    .string({
+      required_error: "id is required",
+      invalid_type_error: "Invalid Data",
+    })
+    .array()
+    .transform((val) => val.map((_id) => new ObjectId(_id)))
+    .refine((arr) => arr.length > 0, { message: "No tickets for delete" }),
 });

@@ -5,7 +5,7 @@ export class SetupTests {
   async getSignInJwtToken(): Promise<string[]> {
     const payload = { id: "1234", username: "alazidis" };
 
-    const userJWT = await jwt.sign(payload, Config.jwtSecret, {
+    const userJWT = jwt.sign(payload, Config.jwtSecret, {
       algorithm: "HS256",
     });
 

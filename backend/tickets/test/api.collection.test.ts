@@ -103,7 +103,126 @@ describe("Tickets validate data", () => {
     expect(tickets[0].userId).toEqual("1234");
   });
 
-  it("Returns 404 error if ticket not found", async () => {});
+  it("Returns 404 error if ticket not found", async () => {
+    const url1 = `${TestEnvs.ticketsUrl}?title=test`; //by query params
+    await request(app)
+      .get(url1)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({})
+      .expect(404);
 
-  it("Returns the ticket if it is found", async () => {});
+    const url2 = `${TestEnvs.ticketsUrl}/123`; //by id
+    const response = await request(app)
+      .get(url2)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({});
+
+    expect([404, 500]).toContain(response.status);
+  });
+
+  it("Returns the ticket if it is found", async () => {
+    const url1 = `${TestEnvs.ticketsUrl}?title=testTicket`; //by query params
+    const response = await request(app)
+      .get(url1)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({});
+
+    expect(response.status).toEqual(200);
+
+    const id = response.body[0]._id;
+
+    const url2 = `${TestEnvs.ticketsUrl}/${id}`; //by id
+    await request(app)
+      .get(url2)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({})
+      .expect(200);
+  });
+
+  it("Update Ticket with invalid data", async () => {
+    //get ticket
+    const response = await request(app)
+      .get(TestEnvs.ticketsUrl)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({});
+
+    await request(app)
+      .patch(`${TestEnvs.ticketsUrl}/${response.body[0]._id}`)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({})
+      .expect(400);
+
+    await request(app)
+      .patch(`${TestEnvs.ticketsUrl}/${response.body[0]._id}`)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({ title: "" })
+      .expect(400);
+
+    await request(app)
+      .patch(`${TestEnvs.ticketsUrl}/${response.body[0]._id}`)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({ price: -1 })
+      .expect(400);
+  });
+  it("Update Ticket valid data", async () => {
+    //get ticket
+    const response = await request(app)
+      .get(TestEnvs.ticketsUrl)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({});
+
+    await request(app)
+      .patch(`${TestEnvs.ticketsUrl}/${response.body[0]._id}`)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({ title: "aaa" })
+      .expect(204);
+
+    await request(app)
+      .patch(`${TestEnvs.ticketsUrl}/${response.body[0]._id}`)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({ price: 100 })
+      .expect(204);
+
+    const query = {};
+    const queryOptions: FindOptions = {};
+    const tickets = await MongoRepository.readDocuments<TicketTimestamps>(
+      dbProps,
+      {
+        query,
+        queryOptions,
+      }
+    );
+    expect(tickets.length).toEqual(1);
+    expect(tickets[0].price).toEqual(100);
+    expect(tickets[0].title).toEqual("aaa");
+    expect(tickets[0].userId).toEqual("1234");
+  });
+
+  it("Delete Ticket Invalid data", async () => {
+    await request(app)
+      .delete(`${TestEnvs.ticketsUrl}`)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({ id: "aaa" })
+      .expect(400);
+
+    await request(app)
+      .delete(`${TestEnvs.ticketsUrl}`)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({ id: [] })
+      .expect(400);
+  });
+
+  it("Delete Ticket valid data", async () => {
+    //get ticket
+    const response = await request(app)
+      .get(TestEnvs.ticketsUrl)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({});
+
+    await request(app)
+      .delete(`${TestEnvs.ticketsUrl}`)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({ id: [response.body[0]._id] })
+      .expect(204);
+  });
 });

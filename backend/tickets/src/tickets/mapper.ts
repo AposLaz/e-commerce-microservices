@@ -7,7 +7,7 @@ export const mapper = {
     createAt: new Date(),
     updateAt: new Date(),
   }),
-  TicketUpdate: (data: Ticket) => ({
+  TicketUpdate: (data: Partial<Ticket>) => ({
     ...data,
     updateAt: new Date(),
   }),

@@ -1,7 +1,6 @@
 import { app } from "./app";
 import { Config } from "./config/config";
 import { logger } from "./config/logger";
-import { connect } from "./config/mongodb/mongo.client";
 
 const port = Config.port || 8080;
 
