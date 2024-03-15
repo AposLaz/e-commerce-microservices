@@ -96,12 +96,13 @@ export const Controller = {
 
     const filter = {
       _id: new ObjectId(ticketId),
+      userId: res.locals.user.id,
     };
     const update = mapper.TicketUpdate(parseBody.data);
 
     const updateTicket = await MongoRepository.updateSingleDocument<
       TicketUpdate & Document
-    >(dbProps, filter, update);
+    >(dbProps, filter, update, { upsert: false });
 
     if (updateTicket.modifiedCount === 0) {
       throw new BadRequestError("Update not happened");
@@ -116,7 +117,10 @@ export const Controller = {
       throw new ZodValidationError(parseBody.error);
     }
 
-    const filter = { _id: { $in: parseBody.data.id } };
+    const filter = {
+      _id: { $in: parseBody.data.id },
+      userId: res.locals.user.id,
+    };
 
     const deleteTickets = await MongoRepository.deleteDocuments<
       TicketsDelete & Document
