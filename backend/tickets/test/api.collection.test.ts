@@ -6,8 +6,8 @@ import { Collections, Databases, DbProps } from "../src/config/mongodb/types";
 import { connect } from "../src/config/mongodb/mongo.client";
 import { MongoRepository } from "../src/config/mongodb/repository";
 import { TicketTimestamps } from "../src/tickets/types";
-import { KafkaAdmin } from "../src/config/kafka/kafka.admin";
-import { Config } from "../src/config/config";
+import { KafkaFactory } from "config/kafka/kafka.factory";
+import { Config } from "config/config";
 
 describe("Tickets validate data", () => {
   let client: MongoClient;
@@ -27,7 +27,10 @@ describe("Tickets validate data", () => {
     //drop collection
     await MongoRepository.dropCollection(dbProps);
     await client.close();
-    await new KafkaAdmin().deleteTopicRecords(Config.topicCreate);
+
+    //delete records from kafka test topic
+    const kafkaAdmin = await KafkaFactory.KafkaAdmin();
+    await kafkaAdmin.deleteTopicRecords(Config.topicCreate);
   });
 
   it("Check if collection is empty", async () => {
