@@ -1,6 +1,14 @@
 import "dotenv/config";
 
-const requiredEnv: string[] = ["APP_NAME", "MONGO_URI", "JWT_SECRET", ""];
+const requiredEnv: string[] = [
+  "APP_NAME",
+  "MONGO_URI",
+  "JWT_SECRET",
+  "KAFKA_TOPIC_PRODUCER_CREATE",
+  "KAFKA_BROKERS",
+  "NODE_ENV",
+  "PORT",
+];
 
 requiredEnv.forEach((name: string) => {
   if (!process.env[name]) {
@@ -17,4 +25,8 @@ export const Config = {
   nodeEnv: process.env.NODE_ENV as string,
   jwtSecret: process.env.JWT_SECRET as string,
   brokers: process.env.KAFKA_BROKERS?.trim().split(",") as string[],
+  topicCreate:
+    process.env.NODE_ENV !== "test"
+      ? (process.env.KAFKA_TOPIC_PRODUCER_CREATE as string)
+      : "testTicketCreate",
 };

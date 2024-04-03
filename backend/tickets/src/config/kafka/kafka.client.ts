@@ -1,4 +1,4 @@
-import { Config } from "config/config";
+import { Config } from "../config";
 import { Kafka, logLevel } from "kafkajs";
 
 export const kafkaClient = new Kafka({

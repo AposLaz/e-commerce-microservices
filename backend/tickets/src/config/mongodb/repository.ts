@@ -5,7 +5,6 @@ import {
   Filter,
   InsertManyResult,
   OptionalUnlessRequiredId,
-  UpdateFilter,
   UpdateOptions,
   WithId,
 } from "mongodb";

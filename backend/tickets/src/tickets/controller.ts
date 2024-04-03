@@ -18,8 +18,11 @@ import { TicketTimestamps, TicketUpdate, TicketsDelete } from "./types";
 import {
   BadRequestError,
   DataNotFound,
+  DatabaseConnectionError,
   ZodValidationError,
 } from "@aplaz-tech/error-handler";
+import { KafkaFactory } from "../config/kafka/kafka.factory";
+import { Config } from "../config/config";
 
 const dbProps: DbProps = {
   database: Databases.TicketsDb,
@@ -40,6 +43,14 @@ export const Controller = {
     ] as Document[]);
 
     if (insertData.insertedCount < 1) throw new MongoError("Save data failed");
+
+    const kafkaFactory = await KafkaFactory.KafkaProducer(Config.topicCreate);
+    const message = await kafkaFactory.sendTransactionBatch([ticket]);
+
+    if (!message) {
+      throw new DatabaseConnectionError("Error write data to kafka");
+    }
+
     res.status(201).send(insertData);
   },
 
