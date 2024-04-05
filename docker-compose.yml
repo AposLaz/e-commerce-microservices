@@ -76,7 +76,7 @@ services:
     networks:
       - tickets-network
     volumes:
-      - ./backend/tickets/database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+     # - ./backend/tickets/database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - /mongo-tickets:/data/db
   
   mongo-express:
@@ -94,8 +94,120 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017/
     networks:
       - tickets-network
+  
+  kafka_admin:
+   container_name: kafka_admin
+   image: alazidis/kafka_admin_client
+   environment:
+    KAFKA_TOPICS: "testProducer,testTicketCreate"
+    KAFKA_BROKERS: "kafka1:19092"
+    KAFKA_REPLICATION_FACTOR: 1
+    KAFKA_NUM_PARTITIONS: 1
+    KAFKA_APP: 'kafka-admin-app'
+   restart: always
+   networks:
+     - default
+   depends_on:
+     control-center:
+       condition: service_started
 
-      
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.1
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+    - default
+
+  kafka1:
+    image: confluentinc/cp-kafka:7.2.1
+    container_name: kafka1
+    ports:
+      - "8097:8097"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:8097,INTERNAL://kafka1:19092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_JMX_PORT: 9101
+      KAFKA_JMX_HOSTNAME: localhost
+    networks:
+     - default
+    restart: on-failure
+    healthcheck:
+        test: ["CMD", "ping", "-c","1", "localhost:8097"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
+
+  # kafka2:
+  #   image: confluentinc/cp-kafka:7.2.1
+  #   container_name: kafka2
+  #   ports:
+  #     - "8098:8098"
+  #   depends_on:
+  #     - zookeeper
+  #   environment:
+  #     KAFKA_BROKER_ID: 2
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+  #     KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:8098,INTERNAL://kafka2:29092
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  #   networks:
+  #    - default
+  #   restart: on-failure
+  #   healthcheck:
+  #       test: ["CMD", "ping", "-c","1", "localhost:8098"]
+  #       interval: 30s
+  #       timeout: 10s
+  #       retries: 5
+
+  # kafka3:
+  #   image: confluentinc/cp-kafka:7.2.1
+  #   container_name: kafka3
+  #   ports:
+  #     - "8099:8099"
+  #   depends_on:
+  #     - zookeeper
+  #   environment:
+  #     KAFKA_BROKER_ID: 3
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT,INTERNAL:PLAINTEXT
+  #     KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:8099,INTERNAL://kafka3:39092
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  #   networks:
+  #    - default
+  #   restart: on-failure
+  #   healthcheck:
+  #       test: ["CMD", "ping", "-c","1", "localhost:8098"]
+  #       interval: 30s
+  #       timeout: 10s
+  #       retries: 5
+  
+  control-center:
+    image: confluentinc/cp-enterprise-control-center:latest
+    hostname: control-center
+    depends_on:
+      - kafka1
+    ports:
+      - "9021:9021"
+    expose:
+      - 9021
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'kafka1:19092'
+      CONTROL_CENTER_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      PORT: 9021
+    networks:
+    - default
+    restart: always
 
 
 volumes:

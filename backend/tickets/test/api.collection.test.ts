@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../src/app";
 import { TestEnvs, setupTestsConfigs } from "./setup";
-import { Db, FindOptions, MongoClient } from "mongodb";
+import { FindOptions, MongoClient } from "mongodb";
 import { Collections, Databases, DbProps } from "../src/config/mongodb/types";
 import { connect } from "../src/config/mongodb/mongo.client";
 import { MongoRepository } from "../src/config/mongodb/repository";
