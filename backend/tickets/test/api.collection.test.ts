@@ -6,8 +6,8 @@ import { Collections, Databases, DbProps } from "../src/config/mongodb/types";
 import { connect } from "../src/config/mongodb/mongo.client";
 import { MongoRepository } from "../src/config/mongodb/repository";
 import { TicketTimestamps } from "../src/tickets/types";
-import { KafkaFactory } from "config/kafka/kafka.factory";
-import { Config } from "config/config";
+import { KafkaFactory } from "../src/config/kafka/kafka.factory";
+import { Config } from "../src/config/config";
 
 describe("Tickets validate data", () => {
   let client: MongoClient;
@@ -103,6 +103,11 @@ describe("Tickets validate data", () => {
         queryOptions,
       }
     );
+
+    //TODO => Add tests for kafka consumer
+    // const consumer = await KafkaFactory.KafkaConsumer(Config.topicCreate);
+    // await consumer.startBatchConsumer(Config.topicCreate);
+
     expect(tickets.length).toEqual(1);
     expect(tickets[0].price).toEqual(20);
     expect(tickets[0].title).toEqual("testTicket");

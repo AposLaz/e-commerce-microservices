@@ -1,8 +1,10 @@
 import { KafkaAdmin } from "./kafka.admin";
+import { KafkaConsumerClient } from "./kafka.consumer";
 import { KafkaProducerClient } from "./kafka.producer";
 
 export class KafkaFactory {
   private static producer: KafkaProducerClient; //static method can be accessible without create a class instance
+  private static consumer: KafkaConsumerClient;
   private static admin: KafkaAdmin;
 
   public static async KafkaProducer(topic: string) {
@@ -12,6 +14,14 @@ export class KafkaFactory {
     }
 
     return this.producer;
+  }
+
+  public static async KafkaConsumer(topic: string) {
+    if (!this.producer) {
+      this.consumer = new KafkaConsumerClient(topic);
+    }
+
+    return this.consumer;
   }
 
   public static async KafkaAdmin() {
