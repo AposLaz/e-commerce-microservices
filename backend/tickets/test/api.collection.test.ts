@@ -5,7 +5,7 @@ import { FindOptions, MongoClient } from "mongodb";
 import { Collections, Databases, DbProps } from "../src/config/mongodb/types";
 import { connect } from "../src/config/mongodb/mongo.client";
 import { MongoRepository } from "../src/config/mongodb/repository";
-import { TicketTimestamps } from "../src/tickets/types";
+import { TicketTimestamps } from "../src/api/types";
 import { KafkaFactory } from "../src/config/kafka/kafka.factory";
 import { Config } from "../src/config/config";
 

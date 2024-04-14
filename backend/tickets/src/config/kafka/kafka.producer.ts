@@ -7,7 +7,7 @@ import {
 } from "kafkajs";
 import { kafkaClient } from "./kafka.client";
 import { logger } from "../logger";
-import { TicketTimestamps } from "../../tickets/types";
+import { TicketTimestamps } from "../../api/types";
 
 export type CreateTicketSchema = TicketTimestamps &
   Omit<TicketTimestamps, keyof Partial<Document>>;
