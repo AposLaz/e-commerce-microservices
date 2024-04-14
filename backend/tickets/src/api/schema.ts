@@ -13,6 +13,12 @@ export const createTicketsPayload = z.object({
     })
     .gt(0, { message: "price must be greater than 0" })
     .positive({ message: "price must be a positive number" }),
+  quantity: z
+    .number({
+      required_error: "quantity is required",
+      invalid_type_error: "quantity must be a number",
+    })
+    .gte(0, { message: "quantity must be greater than or equal to 0" }),
 });
 
 export const updateTicketPayload = createTicketsPayload
@@ -34,6 +40,17 @@ export const getTicketParams = z.object({
     .transform((price) => Number(price))
     .refine((price) => price > 0, { message: "price must be greater than 0" })
     .refine((price) => !isNaN(price), { message: "price must be a number" })
+    .optional(),
+  quantity: z
+    .string()
+    .refine((val) => validator.isNumeric(val), {
+      message: "quantity must contain only numbers",
+    })
+    .transform((price) => Number(price))
+    .refine((price) => price >= 0, {
+      message: "quantity must be greater than or equal to 0",
+    })
+    .refine((price) => !isNaN(price), { message: "quantity must be a number" })
     .optional(),
   userId: z
     .string()

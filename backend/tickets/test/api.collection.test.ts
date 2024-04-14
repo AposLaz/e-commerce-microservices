@@ -72,6 +72,7 @@ describe("Tickets validate data", () => {
       .send({
         title: "test",
         price: -10,
+        quantity: -1,
       })
       .expect(400);
 
@@ -91,6 +92,7 @@ describe("Tickets validate data", () => {
       .send({
         title: "testTicket",
         price: 20,
+        quantity: 3,
       })
       .expect(201);
 
@@ -110,6 +112,7 @@ describe("Tickets validate data", () => {
 
     expect(tickets.length).toEqual(1);
     expect(tickets[0].price).toEqual(20);
+    expect(tickets[0].quantity).toEqual(3);
     expect(tickets[0].title).toEqual("testTicket");
     expect(tickets[0].userId).toEqual("1234");
   });
@@ -174,6 +177,12 @@ describe("Tickets validate data", () => {
       .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
       .send({ price: -1 })
       .expect(400);
+
+    await request(app)
+      .patch(`${TestEnvs.ticketsUrl}/${response.body[0]._id}`)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({ quantity: -1 })
+      .expect(400);
   });
   it("Update Ticket valid data", async () => {
     //get ticket
@@ -194,6 +203,12 @@ describe("Tickets validate data", () => {
       .send({ price: 100 })
       .expect(204);
 
+    await request(app)
+      .patch(`${TestEnvs.ticketsUrl}/${response.body[0]._id}`)
+      .set("Cookie", await setupTestsConfigs.getSignInJwtToken())
+      .send({ quantity: 10 })
+      .expect(204);
+
     const query = {};
     const queryOptions: FindOptions = {};
     const tickets = await MongoRepository.readDocuments<TicketTimestamps>(
@@ -205,6 +220,7 @@ describe("Tickets validate data", () => {
     );
     expect(tickets.length).toEqual(1);
     expect(tickets[0].price).toEqual(100);
+    expect(tickets[0].quantity).toEqual(10);
     expect(tickets[0].title).toEqual("aaa");
     expect(tickets[0].userId).toEqual("1234");
   });
