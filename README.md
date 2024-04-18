@@ -21,7 +21,7 @@ if you want to make changes read ![Documentation](#documentation) below
 # TODO LIST
 
 1) Repository
-    - [x] add [synx](https://snyk.io/)
+    - [x] add [snyk](https://snyk.io/)
 2) Tickets
     - [ ] create jenkins pipeline for the repository (docker)
 3) Jenkins Pipeline for infrastructure
