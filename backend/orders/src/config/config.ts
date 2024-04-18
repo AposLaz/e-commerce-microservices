@@ -25,8 +25,8 @@ export const Config = {
   nodeEnv: process.env.NODE_ENV as string,
   jwtSecret: process.env.JWT_SECRET as string,
   brokers: process.env.KAFKA_BROKERS?.trim().split(",") as string[],
-  topicCreate:
+  topicOrderCreate:
     process.env.NODE_ENV !== "test"
-      ? (process.env.KAFKA_TOPIC_PRODUCER_CREATE as string)
-      : "testTicketCreate",
+      ? (process.env.KAFKA_TOPIC_PRODUCER_CREATE_ORDER as string)
+      : "testTicketCreateOrder",
 };

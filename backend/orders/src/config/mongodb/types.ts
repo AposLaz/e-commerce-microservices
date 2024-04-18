@@ -1,11 +1,11 @@
 import { Filter, FindOptions, MongoClient } from "mongodb";
 
 export enum Databases {
-  TestDb = "_init_test_tickets",
-  TicketsDb = "tickets",
+  TestDb = "_init_test_orders",
+  OrdersDb = "orders",
 }
 export enum Collections {
-  Tickets = "tickets",
+  Orders = "orders",
 }
 
 export type DatabaseProps = {

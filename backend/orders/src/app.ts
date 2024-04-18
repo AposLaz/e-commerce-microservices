@@ -2,7 +2,6 @@ import express, { Express } from "express";
 import { RouteError, errorHandler } from "@aplaz-tech/error-handler";
 import cookieSession from "cookie-session";
 import cors from "cors";
-import TicketsRouter from "./tickets/router";
 
 const app: Express = express();
 
@@ -19,8 +18,6 @@ app.use(
     secure: false, //true if use https
   })
 );
-
-app.use("/api/v1/tickets", TicketsRouter);
 
 app.use("*", (req, _res) => {
   throw new RouteError(`Route ${req.originalUrl} not exists`);

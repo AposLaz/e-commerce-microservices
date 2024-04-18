@@ -2,11 +2,11 @@ import { app } from "./app";
 import { Config } from "./config/config";
 import { logger } from "./config/logger";
 
-const port = Config.port || 8080;
+const port = Config.port || 8090;
 
 const initRestApi = async () => {
   app.listen(port, () => {
-    console.info("Ticket Service running in PORT " + port);
+    console.info("Order Service running in PORT " + port);
   });
 };
 

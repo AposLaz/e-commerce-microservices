@@ -18,4 +18,19 @@ Use 2 Databases MongoDB & PostgreSQL
 
 if you want to make changes read ![Documentation](#documentation) below
 
+# TODO LIST
+
+1) Repository
+    - [x] add [synx](https://snyk.io/)
+2) Tickets
+    - [ ] create jenkins pipeline for the repository (docker)
+3) Jenkins Pipeline for infrastructure
+    - [ ] create eks (3 nodes) with Terraform and/or aws cdk
+    - [ ] use AgroCD for deploy containers in Kubernetes
+4) Then go to Order Service
+5) Create frontend for next.js
+
+Conclusion view tutorial for jenkins
+    
+
 # Documentation
